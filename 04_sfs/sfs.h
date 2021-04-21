@@ -66,9 +66,32 @@ struct sfs_sb_info {
  * SFS in memory inode.
  */
 struct sfs_inode_info {
-  char i_data[64];                  /* sfs inode data (64 bytes) */
+  uint32_t i_data[16];              /* addresses of data blocks */
   struct inode vfs_inode;           /* linux vfs inode */
 };
+
+/*
+ * Get SFS super block from generic VFS super block.
+ */
+static inline struct sfs_sb_info *sfs_sb_info(struct super_block *sb)
+{
+  return sb->s_fs_info;
+}
+
+/*
+ * GET SFS inode from generic VFS inode.
+ */
+static inline struct sfs_inode_info *sfs_inode_info(struct inode *inode)
+{
+  return container_of(inode, struct sfs_inode_info, vfs_inode);
+}
+
+void sfs_set_inode(struct inode *inode);
+struct inode *sfs_iget(struct super_block *sb, unsigned long ino);
+
+extern const struct file_operations sfs_file_operations;
+extern const struct file_operations sfs_dir_operations;
+extern const struct inode_operations sfs_dir_inode_operations;
 
 #endif
 
