@@ -44,6 +44,31 @@ static void destroy_inodecache(void)
 }
 
 /*
+ * Fill SFS super block.
+ */
+static int sfs_fill_super(struct super_block *s, void *data, int silent)
+{
+  return 0;
+}
+
+/*
+ * Mount SFS file system.
+ */
+static struct dentry *sfs_mount(struct file_system_type *fs_type, int flags, const char *dev_name, void *data)
+{
+  return mount_bdev(fs_type, flags, dev_name, data, sfs_fill_super);
+}
+
+/* SFS file system */
+static struct file_system_type sfs_fs_type = {
+  .owner        = THIS_MODULE,
+  .name         = "sfs",
+  .mount        = sfs_mount,
+  .kill_sb      = kill_block_super,
+  .fs_flags     = FS_REQUIRES_DEV,
+};
+
+/*
  * Load SFS module.
  */
 static int __init init_sfs(void)
