@@ -1,6 +1,7 @@
-DISK				= ./disk.img
-DISK_SIZE	  = 32
-MKFS				= mkfs.sfs
+DISK		= ./disk.img
+DISK_SIZE	= 32
+MKFS		= mkfs.sfs
+C_INCLUDE_PATH	= ""
 
 obj-m       := inode.o
 KERNELDIR   ?= /lib/modules/$(shell uname -r)/build

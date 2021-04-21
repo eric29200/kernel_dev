@@ -22,11 +22,8 @@ static void init_once(void *foo)
  */
 static int __init init_inodecache(void)
 {
-  sfs_inode_cache = kmem_cache_create("sfs_inode_cache",
-                                      sizeof(struct sfs_inode_info),
-                                      0, (SLAB_RECLAIM_ACCOUNT|
-                                          SLAB_MEM_SPREAD|SLAB_ACCOUNT),
-                                      init_once);
+  sfs_inode_cache = kmem_cache_create("sfs_inode_cache", sizeof(struct sfs_inode_info), 0,
+                                      (SLAB_RECLAIM_ACCOUNT | SLAB_MEM_SPREAD | SLAB_ACCOUNT), init_once);
 
   if (!sfs_inode_cache)
     return -ENOMEM;
@@ -39,7 +36,10 @@ static int __init init_inodecache(void)
  */
 static void destroy_inodecache(void)
 {
+  /* make sure all delayed rcu free inodes are flushed */
   rcu_barrier();
+
+  /* destroy cache */
   kmem_cache_destroy(sfs_inode_cache);
 }
 
@@ -48,6 +48,7 @@ static void destroy_inodecache(void)
  */
 static int __init init_sfs(void)
 {
+  /* init inode cache */
   int err = init_inodecache();
   if (err)
     return err;
