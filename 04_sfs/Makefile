@@ -1,8 +1,12 @@
 DISK				= ./disk.img
-DISK_SIZE	 = 32
+DISK_SIZE	  = 32
 MKFS				= mkfs.sfs
 
+obj-m       := inode.o
+KERNELDIR   ?= /lib/modules/$(shell uname -r)/build
+
 all: $(DISK)
+	make -C $(KERNELDIR) M=$(PWD) modules
 
 $(MKFS): mkfs.sfs.c
 	$(CC) -Wall -o $@ $<
@@ -13,3 +17,4 @@ $(DISK): $(MKFS)
 
 clean:
 	rm -f $(MKFS) *.o $(DISK)
+	make -C $(KERNELDIR) M=$(PWD) clean
