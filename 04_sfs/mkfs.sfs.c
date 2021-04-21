@@ -77,7 +77,7 @@ static int write_super_block(int fd, off_t file_size)
   sb->s_firstdatazone = 2 + sb->s_imap_blocks + sb->s_zmap_blocks + nb_blocks_itable;
 
   /* set max file size */
-  sb->s_max_size = INT_MAX;
+  sb->s_max_size = 10 * SFS_BLOCK_SIZE;
   sb->s_blocksize = SFS_BLOCK_SIZE;
   sb->s_magic = SFS_MAGIC;
 
