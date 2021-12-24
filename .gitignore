@@ -5,5 +5,3 @@
 */*.mod.c
 */modules.order
 */Module.symvers
-*/mkfs.sfs
-*/disk.img
